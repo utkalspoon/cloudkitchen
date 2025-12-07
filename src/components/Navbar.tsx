@@ -29,18 +29,21 @@ const Navbar = () => {
             <button
               onClick={() => scrollToSection('home')}
               className="text-foreground hover:text-primary transition-colors"
+              aria-label="Navigate to home section"
             >
               Home
             </button>
             <button
               onClick={() => scrollToSection('menu')}
               className="text-foreground hover:text-primary transition-colors"
+              aria-label="Navigate to menu section"
             >
               Menu
             </button>
             <button
               onClick={() => scrollToSection('contact')}
               className="text-foreground hover:text-primary transition-colors"
+              aria-label="Navigate to contact section"
             >
               Contact
             </button>
@@ -51,6 +54,7 @@ const Navbar = () => {
               size="sm"
               className="bg-primary hover:bg-primary/90 text-primary-foreground hidden sm:flex"
               onClick={() => window.location.href = 'tel:7008749781'}
+              aria-label="Call to order now"
             >
               <Phone className="mr-2 h-4 w-4" />
               Order Now
@@ -58,7 +62,7 @@ const Navbar = () => {
 
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Open mobile menu" aria-expanded={isOpen}>
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
@@ -67,24 +71,28 @@ const Navbar = () => {
                   <button
                     onClick={() => scrollToSection('home')}
                     className="text-left text-lg text-foreground hover:text-primary transition-colors"
+                    aria-label="Navigate to home section"
                   >
                     Home
                   </button>
                   <button
                     onClick={() => scrollToSection('menu')}
                     className="text-left text-lg text-foreground hover:text-primary transition-colors"
+                    aria-label="Navigate to menu section"
                   >
                     Menu
                   </button>
                   <button
                     onClick={() => scrollToSection('contact')}
                     className="text-left text-lg text-foreground hover:text-primary transition-colors"
+                    aria-label="Navigate to contact section"
                   >
                     Contact
                   </button>
                   <Button
                     className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
                     onClick={() => window.location.href = 'tel:7008749781'}
+                    aria-label="Call to order now"
                   >
                     <Phone className="mr-2 h-4 w-4" />
                     Order Now

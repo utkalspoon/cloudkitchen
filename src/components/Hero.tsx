@@ -5,7 +5,7 @@ import heroImage from "@/assets/hero-image.jpg";
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: `url(${heroImage})`,
@@ -13,7 +13,7 @@ const Hero = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/85 to-background" />
       </div>
-      
+
       <div className="container relative z-10 px-4 py-20">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
           <div className="space-y-4">
@@ -31,17 +31,26 @@ const Hero = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-            <Button 
+            <Button
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-lg shadow-[0_0_30px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)] transition-all"
+              onClick={() => window.location.href = 'tel:7008749781'}
+              aria-label="Call to order now"
             >
               <Phone className="mr-2 h-5 w-5" />
               Order Now
             </Button>
-            <Button 
+            <Button
               variant="outline"
               size="lg"
               className="border-2 border-primary/50 hover:bg-primary/10 text-foreground font-semibold px-8 py-6 text-lg"
+              onClick={() => {
+                const menuElement = document.getElementById('menu');
+                if (menuElement) {
+                  menuElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              aria-label="Scroll to menu section"
             >
               View Menu
             </Button>

@@ -306,24 +306,33 @@ const MenuSection = () => {
                 </div>
 
                 {category.showImages ? (
-                  <div className={`grid gap-6 ${
-                    category.items.length === 1 
-                      ? 'md:grid-cols-1 max-w-md mx-auto' 
+                  <div className={`grid gap-6 ${category.items.length === 1
+                      ? 'md:grid-cols-1 max-w-md mx-auto'
                       : category.items.length <= 3
-                      ? 'sm:grid-cols-2 lg:grid-cols-3'
-                      : 'sm:grid-cols-2 lg:grid-cols-4'
-                  }`}>
+                        ? 'sm:grid-cols-2 lg:grid-cols-3'
+                        : 'sm:grid-cols-2 lg:grid-cols-4'
+                    }`}>
                     {category.items.map((item, itemIdx) => (
-                      <Card 
+                      <Card
                         key={itemIdx}
                         className="bg-card border-border hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] transition-all duration-300 overflow-hidden group cursor-pointer"
                         onClick={() => openModal(item)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openModal(item);
+                          }
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`View recipe for ${item.name}`}
                       >
                         <div className="relative h-48 overflow-hidden">
-                          <img 
-                            src={item.image} 
-                            alt={item.name}
+                          <img
+                            src={item.image}
+                            alt={`${item.name} - ${item.description || 'Delicious homestyle food'}`}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            loading="lazy"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                           <div className="absolute bottom-3 right-3">
@@ -346,8 +355,8 @@ const MenuSection = () => {
                     <CardContent className="pt-6">
                       <div className="space-y-4">
                         {category.items.map((item, itemIdx) => (
-                          <div 
-                            key={itemIdx} 
+                          <div
+                            key={itemIdx}
                             className="flex justify-between items-start gap-2 pb-3 border-b border-border/50 last:border-0 last:pb-0"
                           >
                             <div className="flex-1">
@@ -375,7 +384,7 @@ const MenuSection = () => {
             <Card className="bg-muted/30 border-primary/20 max-w-3xl mx-auto">
               <CardContent className="py-6">
                 <p className="text-muted-foreground">
-                  <span className="text-primary font-semibold">Special Offer:</span> Discount bumper offer applicable to monthly regular customers 
+                  <span className="text-primary font-semibold">Special Offer:</span> Discount bumper offer applicable to monthly regular customers
                   (26 days out of 30/31 days in a month)
                 </p>
               </CardContent>
