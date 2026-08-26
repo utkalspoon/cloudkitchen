@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Utkal Spoon Cloud Kitchen — Taste and Quality meets Wellness. Home-style food in Sarkhej, Ahmedabad. Order on Swiggy, Zomato, or WhatsApp." />
+  <title>Utkal Spoon Cloud Kitchen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & BASE ── */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%}
+    body{
+      background-color:hsl(20,10%,8%);
+      /* iOS Safari fix: use scroll not fixed for background-attachment */
+      background-image:linear-gradient(to bottom, rgba(20,14,10,0.85), rgba(20,14,10,0.93)), url('/assets/hero-image.jpg');
+      background-attachment:scroll;
+      background-size:cover;
+      background-position:center top;
+      color:hsl(40,10%,95%);
+      font-family:'Inter',sans-serif;
+      overflow-x:hidden;
+      min-height:100vh;
+      min-height:100dvh;
+    }
+    /* iOS parallax workaround */
+    @supports (-webkit-touch-callout: none){
+      body{background-attachment:scroll}
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .text-primary{color:hsl(25,95%,53%)}
+    .text-muted{color:hsl(40,8%,65%)}
+
+    /* ── GLASS NAVBAR ── */
+    nav{
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      background:hsla(20,10%,8%,.88);
+      border-bottom:1px solid hsla(25,95%,53%,.2);
+      box-shadow:0 4px 30px rgba(0,0,0,0.5);
+      position:relative;
+    }
+    .nav-inner{max-width:1152px;margin:0 auto;padding:0 1rem;position:relative}
+    .nav-row{display:flex;align-items:center;justify-content:space-between;height:64px}
+
+    /* ── NAV LINKS ── */
+    .nav-link{font-size:.875rem;font-weight:500;color:hsl(40,10%,95%);text-decoration:none;padding-bottom:2px;transition:all .2s;border-bottom:2px solid transparent}
+    .nav-link.active,.nav-link:hover{color:hsl(25,95%,53%);border-bottom-color:hsl(25,95%,53%)}
+
+    /* ── HAMBURGER ── */
+    #hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;border-radius:.5rem;-webkit-tap-highlight-color:transparent}
+    #hamburger span{display:block;width:24px;height:2px;background:hsl(40,10%,95%);border-radius:2px;transition:all .3s ease}
+    #hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    #hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+    #hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    /* ── MOBILE MENU ── */
+    #mobile-menu{
+      display:none;
+      flex-direction:column;
+      gap:0;
+      background:hsla(20,10%,7%,.99);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border-top:1px solid hsla(25,95%,53%,.2);
+      position:absolute;
+      top:64px;left:0;right:0;
+      padding:1rem;
+      box-shadow:0 12px 30px rgba(0,0,0,0.7);
+      z-index:100;
+    }
+    #mobile-menu.open{display:flex}
+    .mob-nav-link{
+      display:flex;align-items:center;gap:.75rem;
+      width:100%;padding:.9rem 1rem;border-radius:.65rem;
+      font-size:1rem;font-weight:600;color:hsl(40,10%,95%);
+      border:none;background:none;cursor:pointer;text-decoration:none;
+      transition:background .2s;-webkit-tap-highlight-color:transparent;
+    }
+    .mob-nav-link:hover,.mob-nav-link:active{background:hsla(25,95%,53%,.15);color:hsl(25,95%,53%)}
+    .mob-divider{height:1px;background:hsla(25,95%,53%,.15);margin:.5rem 0}
+    .mob-cta{display:flex;gap:.5rem;margin-top:.5rem}
+    .mob-cta-btn{
+      flex:1;text-align:center;border-radius:.85rem;
+      padding:.8rem .5rem;font-weight:700;font-size:.85rem;border:none;cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .mob-wa{background:#25D366!important;color:#fff!important}
+    .mob-call{background:hsl(25,95%,53%)!important;color:#fff!important}
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn{from{opacity:0;transform:translateY(28px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .fade-in{animation:fadeIn .7s cubic-bezier(0.16,1,0.3,1) both}
+    @keyframes float3D{
+      0%,100%{transform:translateY(0) rotate(0deg)}
+      50%{transform:translateY(-12px) rotate(4deg)}
+    }
+    .floating-3d{animation:float3D 4s ease-in-out infinite}
+    .floating-3d-delayed{animation:float3D 5s ease-in-out 2s infinite}
+    @keyframes pulseGlow{
+      0%,100%{box-shadow:0 0 15px hsla(25,95%,53%,.3),0 0 30px hsla(25,95%,53%,.1)}
+      50%{box-shadow:0 0 30px hsla(25,95%,53%,.6),0 0 50px hsla(25,95%,53%,.3)}
+    }
+    .glow-pulse{animation:pulseGlow 3s infinite}
+
+    /* ── 3D CARD SYSTEM ── */
+    .card-3d-wrap{perspective:1000px}
+    .card{
+      background:hsla(20,12%,12%,.88);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border:1px solid hsla(25,95%,53%,.2);
+      border-radius:1.25rem;
+      overflow:hidden;
+      cursor:pointer;
+      transition:transform .4s cubic-bezier(.165,.84,.44,1),box-shadow .4s ease,border-color .4s ease;
+      box-shadow:0 10px 30px -10px rgba(0,0,0,0.7);
+      position:relative;
+      /* Ensure it works on touch devices */
+      -webkit-tap-highlight-color:transparent;
+    }
+    /* Only apply 3D tilt on non-touch devices */
+    @media(hover:hover){
+      .card:hover{border-color:hsl(25,95%,53%);box-shadow:0 20px 40px -15px hsla(25,95%,53%,.35),0 0 25px hsla(25,95%,53%,.2)}
+      .card img{transition:transform .6s cubic-bezier(.165,.84,.44,1)}
+      .card:hover img{transform:scale(1.1)}
+    }
+    /* Touch-friendly active state */
+    .card:active{transform:scale(0.97);box-shadow:0 4px 15px rgba(0,0,0,0.5)}
+
+    .card-content{padding:1rem}
+    .price-badge{
+      background:linear-gradient(135deg,hsl(25,95%,53%),hsl(15,90%,45%));
+      color:#fff;font-weight:700;font-size:.8rem;
+      padding:.3rem .75rem;border-radius:9999px;
+      position:absolute;bottom:.6rem;right:.6rem;
+      box-shadow:0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    /* ── BUTTONS ── */
+    .btn-3d-primary{
+      background:linear-gradient(135deg,hsl(25,95%,55%),hsl(20,90%,48%));
+      color:#fff;border:none;border-radius:.85rem;
+      padding:.85rem 1.5rem;font-size:1rem;font-weight:600;cursor:pointer;
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      box-shadow:0 8px 25px hsla(25,95%,53%,.4),0 2px 0 hsl(20,90%,38%);
+      transition:all .25s cubic-bezier(.175,.885,.32,1.275);
+      -webkit-tap-highlight-color:transparent;white-space:nowrap;
+    }
+    .btn-3d-primary:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 35px hsla(25,95%,53%,.55),0 4px 0 hsl(20,90%,38%)}
+    .btn-3d-primary:active{transform:translateY(1px) scale(.98)}
+
+    .btn-3d-green{
+      background:linear-gradient(135deg,#25D366,#1ebe5d);
+      color:#fff;border:none;border-radius:.85rem;
+      padding:.85rem 1.5rem;font-size:1rem;font-weight:600;cursor:pointer;
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      box-shadow:0 8px 25px rgba(37,211,102,.35),0 2px 0 #128C7E;
+      transition:all .25s cubic-bezier(.175,.885,.32,1.275);
+      -webkit-tap-highlight-color:transparent;white-space:nowrap;
+    }
+    .btn-3d-green:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 35px rgba(37,211,102,.5),0 4px 0 #128C7E}
+    .btn-3d-green:active{transform:translateY(1px) scale(.98)}
+
+    .btn-outline{
+      background:hsla(20,10%,8%,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      color:hsl(40,10%,95%);border:2px solid hsla(25,95%,53%,.5);border-radius:.85rem;
+      padding:.85rem 1.5rem;font-size:1rem;font-weight:600;cursor:pointer;
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      transition:all .25s ease;-webkit-tap-highlight-color:transparent;white-space:nowrap;
+    }
+    .btn-outline:hover{background:hsla(25,95%,53%,.2);border-color:hsl(25,95%,53%);transform:translateY(-3px) scale(1.04)}
+    .btn-outline:active{transform:scale(.97)}
+
+    /* ── MODAL ── */
+    #modal-overlay{
+      display:none;position:fixed;inset:0;
+      background:rgba(0,0,0,.85);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      z-index:1000;align-items:center;justify-content:center;
+      padding:1rem;overflow-y:auto;
+    }
+    #modal-overlay.open{display:flex}
+    #modal-box{
+      background:hsl(20,12%,12%);
+      border:1px solid hsla(25,95%,53%,.3);
+      border-radius:1.5rem;
+      max-width:540px;width:100%;
+      max-height:90vh;overflow-y:auto;
+      padding:1.75rem;position:relative;
+      box-shadow:0 25px 50px -12px rgba(0,0,0,0.9),0 0 30px hsla(25,95%,53%,.2);
+      animation:modal3DIn .35s cubic-bezier(.175,.885,.32,1.275) forwards;
+    }
+    @keyframes modal3DIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-close{
+      position:absolute;top:1rem;right:1rem;
+      background:hsl(20,10%,20%);border:none;color:hsl(40,10%,95%);
+      border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1.1rem;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .2s;-webkit-tap-highlight-color:transparent;
+      flex-shrink:0;
+    }
+    .modal-close:hover{background:hsl(25,95%,53%);transform:rotate(90deg)}
+    .modal-close:active{transform:scale(.9)}
+    .modal-btns{display:flex;gap:.75rem;flex-wrap:wrap}
+    .modal-btns button{flex:1;min-width:130px;font-size:.9rem;padding:.85rem}
+
+    /* ── MISC ── */
+    .section-title{font-size:2.25rem;font-weight:800;color:hsl(40,10%,95%)}
+    .section-title span{color:hsl(25,95%,53%);text-shadow:0 0 20px hsla(25,95%,53%,.4)}
+    .page{display:none}
+    .page.active{display:block}
+
+    /* ── FEATURES STRIP ── */
+    #features-strip{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1.5rem;text-align:center;
+      max-width:1000px;margin:0 auto;
+    }
+
+    /* ── FLOATING WHATSAPP ── */
+    @keyframes waPulse{
+      0%{box-shadow:0 0 0 0 rgba(37,211,102,.7),0 8px 25px rgba(37,211,102,.4)}
+      70%{box-shadow:0 0 0 18px rgba(37,211,102,0),0 8px 25px rgba(37,211,102,.4)}
+      100%{box-shadow:0 0 0 0 rgba(37,211,102,0),0 8px 25px rgba(37,211,102,.4)}
+    }
+    @keyframes waSlideIn{from{transform:translateX(120px) scale(.6);opacity:0}to{transform:translateX(0) scale(1);opacity:1}}
+    #wa-float{
+      position:fixed;bottom:1.5rem;right:1.5rem;z-index:998;
+      display:flex;align-items:center;gap:.6rem;
+      background:#25D366;color:#fff;
+      border-radius:9999px;
+      padding:.85rem 1.35rem .85rem .95rem;
+      font-size:.92rem;font-weight:700;
+      cursor:pointer;text-decoration:none;
+      box-shadow:0 8px 25px rgba(37,211,102,.4);
+      animation:waPulse 2.4s ease-out infinite,waSlideIn .6s cubic-bezier(.175,.885,.32,1.275) both;
+      transition:transform .25s ease,box-shadow .25s ease;
+      letter-spacing:.01em;
+      -webkit-tap-highlight-color:transparent;
+    }
+    #wa-float:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 16px 35px rgba(37,211,102,.55)}
+    #wa-float:active{transform:scale(.96)}
+    .wa-label{white-space:nowrap;overflow:hidden;max-width:140px;transition:max-width .3s,opacity .3s}
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:hsl(20,10%,8%)}
+    ::-webkit-scrollbar-thumb{background:hsla(25,95%,53%,.5);border-radius:4px}
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE — TABLET (≤ 900px)
+    ══════════════════════════════════════════ */
+    @media(max-width:900px){
+      #features-strip{grid-template-columns:repeat(2,1fr);gap:1rem}
+    }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE — MOBILE (≤ 768px)
+    ══════════════════════════════════════════ */
+    @media(max-width:768px){
+      /* Navbar */
+      #desktop-links{display:none!important}
+      #desktop-cta{display:none!important}
+      #hamburger{display:flex!important}
+
+      /* Hero buttons: full-width stacked column */
+      .hero-btns{flex-direction:column!important;align-items:stretch!important;padding:0 .5rem}
+      .hero-btns>*{width:100%!important;justify-content:center!important}
+      .hero-platform-row{flex-direction:column!important;align-items:stretch!important;gap:.5rem!important}
+      .hero-platform-row>a{width:100%!important;justify-content:center!important}
+
+      /* Menu grid: 2 columns */
+      #veg-grid,#nonveg-grid{grid-template-columns:repeat(2,1fr)!important;gap:1rem!important}
+
+      /* Features strip: 2 columns */
+      #features-strip{grid-template-columns:repeat(2,1fr)!important}
+
+      /* Section titles */
+      .section-title{font-size:1.85rem!important}
+
+      /* Hero text */
+      .hero-tagline{font-size:1.15rem!important}
+      .hero-subtitle{font-size:1rem!important}
+
+      /* Floating WA: full text still visible on tablet */
+    }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE — SMALL PHONE (≤ 480px)
+    ══════════════════════════════════════════ */
+    @media(max-width:480px){
+      /* Menu grid: 1 column */
+      #veg-grid,#nonveg-grid{grid-template-columns:1fr!important;gap:.85rem!important}
+
+      /* Features strip: 2 columns still ok */
+      #features-strip{grid-template-columns:repeat(2,1fr)!important;gap:.75rem!important}
+
+      /* Section titles */
+      .section-title{font-size:1.6rem!important}
+
+      /* Hero text */
+      .hero-tagline{font-size:1rem!important}
+      .hero-subtitle{font-size:.9rem!important}
+
+      /* Floating WA button: icon only */
+      #wa-float{padding:.9rem;border-radius:50%}
+      .wa-label{max-width:0;opacity:0;padding:0}
+
+      /* Modal: full padding tweak */
+      #modal-box{padding:1.25rem;border-radius:1rem}
+
+      /* Feature strip single column on very small */
+    }
+
+    /* ══════════════════════════════════════════
+       REDUCE MOTION
+    ══════════════════════════════════════════ */
+    @media(prefers-reduced-motion:reduce){
+      *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav style="position:fixed;top:0;width:100%;z-index:50">
+  <div class="nav-inner">
+    <div class="nav-row">
+      <!-- Logo -->
+      <a href="#" onclick="return showPage('home')" style="display:flex;align-items:center;gap:.5rem;text-decoration:none;flex-shrink:0" aria-label="Utkal Spoon Home">
+        <span style="font-size:1.55rem;font-weight:800;color:hsl(25,95%,53%);text-shadow:0 0 15px hsla(25,95%,53%,.4)">US</span>
+        <span style="font-size:1.1rem;font-weight:700;color:hsl(40,10%,95%)">Utkal Spoon</span>
+      </a>
+      <!-- Desktop nav links -->
+      <div id="desktop-links" style="display:flex;align-items:center;gap:2rem">
+        <a href="#" id="nl-home" onclick="return showPage('home')" class="nav-link active">Home</a>
+        <a href="#" id="nl-menu" onclick="return showPage('menu')" class="nav-link">Menu</a>
+        <a href="#" id="nl-contact" onclick="return showPage('contact')" class="nav-link">Contact</a>
+      </div>
+      <!-- Desktop CTA -->
+      <div id="desktop-cta" style="display:flex;align-items:center;gap:.5rem">
+        <button class="btn-3d-green" onclick="openWA()" style="padding:.5rem 1rem;font-size:.85rem" aria-label="Order on WhatsApp">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </button>
+        <button class="btn-3d-primary" onclick="location.href='tel:7008749781'" style="padding:.5rem 1rem;font-size:.85rem" aria-label="Call to Order">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12.5a19.79 19.79 0 01-3.07-8.67A2 2 0 013.59 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Order Now
+        </button>
+      </div>
+      <!-- Hamburger (mobile) -->
+      <button id="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <!-- Mobile dropdown -->
+    <div id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+      <a href="#" class="mob-nav-link" onclick="return mobNav('home')">🏠 Home</a>
+      <a href="#" class="mob-nav-link" onclick="return mobNav('menu')">🍽️ Menu</a>
+      <a href="#" class="mob-nav-link" onclick="return mobNav('contact')">📞 Contact</a>
+      <div class="mob-divider"></div>
+      <div class="mob-cta">
+        <button class="mob-cta-btn mob-wa" onclick="openWA();toggleMobileMenu()">💬 WhatsApp</button>
+        <button class="mob-cta-btn mob-call" onclick="location.href='tel:7008749781';toggleMobileMenu()">📞 Call Now</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HOME ═══════════ -->
+<section id="page-home" class="page active">
+  <div style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center">
+    <!-- Floating decorations (hidden on mobile for performance) -->
+    <div class="floating-3d" style="position:absolute;top:20%;left:6%;font-size:2.5rem;pointer-events:none;display:none" id="deco1">🍛</div>
+    <div class="floating-3d-delayed" style="position:absolute;top:24%;right:8%;font-size:2.5rem;pointer-events:none;display:none" id="deco2">🍲</div>
+    <div class="floating-3d" style="position:absolute;bottom:24%;left:10%;font-size:2rem;pointer-events:none;display:none" id="deco3">🌶️</div>
+    <div class="floating-3d-delayed" style="position:absolute;bottom:20%;right:12%;font-size:2rem;pointer-events:none;display:none" id="deco4">✨</div>
+
+    <div class="fade-in" style="position:relative;z-index:1;text-align:center;padding:5.5rem 1.25rem 3.5rem;max-width:860px;margin:0 auto;width:100%">
+      <!-- Open badge -->
+      <div class="glow-pulse" style="display:inline-flex;align-items:center;gap:.5rem;padding:.45rem 1.25rem;border-radius:9999px;background:hsla(25,95%,53%,.2);border:1px solid hsla(25,95%,53%,.5);font-size:.8rem;font-weight:700;color:hsl(25,95%,65%);margin-bottom:1.5rem">
+        <span style="width:9px;height:9px;border-radius:50%;background:hsl(25,95%,53%);display:inline-block;flex-shrink:0"></span>
+        Now Open · Sarkhej, Ahmedabad
+      </div>
+      <!-- Headline -->
+      <h1 style="font-size:clamp(2.2rem,7.5vw,5.25rem);font-weight:800;line-height:1.1;margin-bottom:1.25rem">
+        <span class="text-primary" style="text-shadow:0 0 30px hsla(25,95%,53%,.35)">Utkal Spoon</span><br>
+        <span style="color:hsl(40,10%,98%)">Cloud Kitchen</span>
+      </h1>
+      <p class="hero-tagline" style="font-size:1.3rem;font-weight:600;color:hsl(35,90%,60%);margin-bottom:.5rem;letter-spacing:.02em">Taste and Quality meets Wellness</p>
+      <p class="hero-subtitle" style="font-size:1.1rem;font-style:italic;color:hsl(40,8%,70%);margin-bottom:2.5rem">Ghar ka Quality Khana ka majja le lo...</p>
+
+      <!-- Main CTA buttons -->
+      <div class="hero-btns" style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:2rem">
+        <button class="btn-3d-primary" onclick="location.href='tel:7008749781'" aria-label="Call to order">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12.5a19.79 19.79 0 01-3.07-8.67A2 2 0 013.59 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Order Now
+        </button>
+        <button class="btn-3d-green" onclick="openWA()" aria-label="Order on WhatsApp">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Order
+        </button>
+        <button class="btn-outline" onclick="showPage('menu')" aria-label="View our menu">View Menu</button>
+      </div>
+
+      <!-- Platform links -->
+      <div style="margin-bottom:1.75rem">
+        <p style="font-size:.85rem;color:hsl(40,8%,65%);margin-bottom:.75rem">Also order on:</p>
+        <div class="hero-platform-row" style="display:flex;flex-wrap:wrap;justify-content:center;gap:.65rem">
+          <a href="https://www.swiggy.com/city/ahmedabad/utaklcloud-kitchen-prahlad-nagar-rest1422492" target="_blank" rel="noopener noreferrer"
+             style="display:flex;align-items:center;gap:.55rem;padding:.6rem 1.25rem;border-radius:12px;text-decoration:none;background:#FC8019;box-shadow:0 6px 20px rgba(252,128,25,.4);transition:transform .25s,box-shadow .25s;font-weight:700;font-size:.9rem;color:#fff"
+             onmouseover="this.style.transform='translateY(-3px) scale(1.04)'" onmouseout="this.style.transform='none'" aria-label="Order on Swiggy">
+            <svg width="22" height="22" viewBox="0 0 50 50" fill="none" aria-hidden="true"><rect width="50" height="50" rx="10" fill="white"/><path d="M25 8C15.611 8 8 15.611 8 25C8 34.389 15.611 42 25 42C34.389 42 42 34.389 42 25C42 15.611 34.389 8 25 8ZM25 14C25 14 32 18.5 32 25C32 28.866 28.866 32 25 32C21.134 32 18 28.866 18 25C18 22.567 19.209 20.418 21.068 19.12" stroke="#FC8019" stroke-width="2.5" stroke-linecap="round"/><circle cx="25" cy="25" r="4" fill="#FC8019"/></svg>
+            Swiggy
+          </a>
+          <a href="http://zoma.to/r/22376644" target="_blank" rel="noopener noreferrer"
+             style="display:flex;align-items:center;gap:.55rem;padding:.6rem 1.25rem;border-radius:12px;text-decoration:none;background:#E23744;box-shadow:0 6px 20px rgba(226,55,68,.4);transition:transform .25s,box-shadow .25s;font-weight:700;font-size:.9rem;color:#fff"
+             onmouseover="this.style.transform='translateY(-3px) scale(1.04)'" onmouseout="this.style.transform='none'" aria-label="Order on Zomato">
+            <svg width="22" height="22" viewBox="0 0 50 50" fill="none" aria-hidden="true"><rect width="50" height="50" rx="10" fill="white"/><path d="M12 16H38L22 32H38" stroke="#E23744" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Zomato
+          </a>
+        </div>
+      </div>
+
+      <!-- Status pills -->
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;font-size:.85rem;color:hsl(40,8%,70%)">
+        <span style="display:flex;align-items:center;gap:.5rem"><span style="width:8px;height:8px;border-radius:50%;background:hsl(35,90%,60%);display:inline-block;flex-shrink:0"></span>Take Away Available</span>
+        <span style="display:flex;align-items:center;gap:.5rem"><span style="width:8px;height:8px;border-radius:50%;background:#25D366;display:inline-block;flex-shrink:0"></span>WhatsApp Orders Welcome</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features strip -->
+  <div style="background:hsla(20,12%,11%,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid hsla(25,95%,53%,.2);border-bottom:1px solid hsla(25,95%,53%,.2);padding:2.5rem 1.25rem">
+    <div id="features-strip">
+      <div style="transition:transform .3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'"><div style="font-size:2rem;margin-bottom:.5rem">🏠</div><div style="font-weight:700;font-size:.9rem">Home Style</div><div style="font-size:.8rem;color:hsl(40,8%,65%)">Fresh, wholesome</div></div>
+      <div style="transition:transform .3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'"><div style="font-size:2rem;margin-bottom:.5rem">⚡</div><div style="font-weight:700;font-size:.9rem">Quick Delivery</div><div style="font-size:.8rem;color:hsl(40,8%,65%)">Via Swiggy &amp; Zomato</div></div>
+      <div style="transition:transform .3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'"><div style="font-size:2rem;margin-bottom:.5rem">💚</div><div style="font-weight:700;font-size:.9rem">Hygienic &amp; Pure</div><div style="font-size:.8rem;color:hsl(40,8%,65%)">Quality guaranteed</div></div>
+      <div style="transition:transform .3s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'"><div style="font-size:2rem;margin-bottom:.5rem">💰</div><div style="font-weight:700;font-size:.9rem">Budget Friendly</div><div style="font-size:.8rem;color:hsl(40,8%,65%)">Meals from ₹15</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MENU ═══════════ -->
+<section id="page-menu" class="page">
+  <div style="padding:5rem 1.25rem 4rem;max-width:1200px;margin:0 auto">
+    <div class="fade-in" style="text-align:center;margin-bottom:2.5rem">
+      <h2 class="section-title">Our <span>Menu</span></h2>
+      <p style="color:hsl(40,8%,65%);margin-top:.5rem;font-size:.95rem">Tap any dish to see ingredients &amp; order</p>
+    </div>
+
+    <!-- VEG -->
+    <div style="margin-bottom:3.5rem">
+      <h3 style="font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:1.75rem">🌿 Veg Items</h3>
+      <div id="veg-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem"></div>
+    </div>
+
+    <!-- NON-VEG -->
+    <div style="margin-bottom:2.5rem">
+      <h3 style="font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:1.75rem">🍗 Non-Veg Items</h3>
+      <div id="nonveg-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem"></div>
+    </div>
+
+    <!-- Offer banner -->
+    <div style="background:hsla(25,95%,53%,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid hsla(25,95%,53%,.3);border-radius:1.25rem;padding:1.1rem 1.25rem;text-align:center;font-size:.92rem;color:hsl(40,8%,90%)">
+      <span class="text-primary" style="font-weight:700">Special Offer:</span> Discount bumper offer applicable to monthly regular customers (26 days out of 30/31 days in a month)
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section id="page-contact" class="page">
+  <div style="padding:5rem 1.25rem 4rem;max-width:620px;margin:0 auto;min-height:80vh">
+    <div class="fade-in" style="text-align:center;margin-bottom:2.5rem">
+      <h2 class="section-title">Contact <span>Us</span></h2>
+      <p style="color:hsl(40,8%,65%);margin-top:.5rem">We'd love to hear from you</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1.1rem;margin-bottom:1.75rem">
+      <!-- Phone -->
+      <div class="card" tabindex="0" style="display:flex;align-items:center;gap:1.1rem;padding:1.25rem">
+        <div style="width:46px;height:46px;border-radius:.85rem;background:hsla(25,95%,53%,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0" aria-hidden="true">📞</div>
+        <div><div style="font-weight:700;margin-bottom:.2rem">Phone</div><a href="tel:+917008749781" class="text-primary" style="font-weight:600;text-decoration:none;font-size:1.05rem">+91 7008 749 781</a><div style="font-size:.82rem;color:hsl(40,8%,65%);margin-top:.2rem">Call to place your order</div></div>
+      </div>
+      <!-- WhatsApp -->
+      <div class="card" tabindex="0" style="display:flex;align-items:center;gap:1.1rem;padding:1.25rem">
+        <div style="width:46px;height:46px;border-radius:.85rem;background:rgba(37,211,102,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0" aria-hidden="true">💬</div>
+        <div><div style="font-weight:700;margin-bottom:.2rem">WhatsApp</div><button onclick="openWA()" style="color:#25D366;font-weight:600;background:none;border:none;cursor:pointer;padding:0;font-size:1.05rem">+91 7008 749 781</button><div style="font-size:.82rem;color:hsl(40,8%,65%);margin-top:.2rem">Chat to place your order</div></div>
+      </div>
+      <!-- Location -->
+      <div class="card" tabindex="0" style="display:flex;align-items:center;gap:1.1rem;padding:1.25rem">
+        <div style="width:46px;height:46px;border-radius:.85rem;background:hsla(25,95%,53%,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0" aria-hidden="true">📍</div>
+        <div><div style="font-weight:700;margin-bottom:.2rem">Location</div><div class="text-primary" style="font-weight:600;font-size:.95rem">B-902, Vrajdham 2, Vrajdham by Signature</div><div style="font-size:.82rem;color:hsl(40,8%,65%);margin-top:.3rem">Sarkhej, Ahmedabad · Sarkhej-Okaf, Gujarat 382210</div></div>
+      </div>
+      <!-- Hours -->
+      <div class="card" tabindex="0" style="display:flex;align-items:center;gap:1.1rem;padding:1.25rem">
+        <div style="width:46px;height:46px;border-radius:.85rem;background:hsla(25,95%,53%,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0" aria-hidden="true">🕐</div>
+        <div><div style="font-weight:700;margin-bottom:.2rem">Hours</div><div class="text-primary" style="font-weight:600;font-size:1rem">7:00 AM – 9:00 PM</div><div style="font-size:.82rem;color:hsl(40,8%,65%);margin-top:.2rem">Monday to Sunday</div></div>
+      </div>
+    </div>
+    <!-- CTA buttons — flex-wrap for very small screens -->
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <button class="btn-3d-green" onclick="openWA()" style="flex:1;min-width:140px">💬 WhatsApp Order</button>
+      <button class="btn-3d-primary" onclick="location.href='tel:+917008749781'" style="flex:1;min-width:140px">📞 Call to Order</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MODAL ═══════════ -->
+<div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="mn" onclick="handleOverlayClick(event)">
+  <div id="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close modal">✕</button>
+    <img id="mi" src="" alt="" style="width:100%;height:200px;object-fit:cover;border-radius:.85rem;margin-bottom:1.1rem;box-shadow:0 10px 25px rgba(0,0,0,0.6)" loading="lazy">
+    <h3 id="mn" style="color:hsl(25,95%,53%);font-size:1.3rem;font-weight:800;margin-bottom:.4rem;padding-right:2.5rem"></h3>
+    <span id="mp" style="display:inline-block;margin-bottom:.7rem;padding:.28rem .8rem;border-radius:9999px;background:linear-gradient(135deg,hsl(25,95%,53%),hsl(15,90%,45%));color:#fff;font-weight:800;font-size:.9rem"></span>
+    <p id="md" style="font-size:.92rem;color:hsl(40,8%,75%);margin-bottom:1rem;line-height:1.55"></p>
+    <div style="margin-bottom:1.25rem;background:hsla(20,10%,8%,.6);padding:.9rem;border-radius:.75rem;border:1px solid hsla(25,95%,53%,.15)">
+      <p style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:hsl(25,95%,53%);margin-bottom:.35rem">Ingredients</p>
+      <p id="mig" style="font-size:.88rem;color:hsl(40,8%,85%);line-height:1.45"></p>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-3d-green modal-btns" onclick="openWA()" style="flex:1;min-width:130px;font-size:.88rem;padding:.8rem">💬 Order via WhatsApp</button>
+      <button class="btn-3d-primary" onclick="location.href='tel:+917008749781'" style="flex:1;min-width:130px;font-size:.88rem;padding:.8rem">📞 Call to Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FLOATING WHATSAPP ═══════════ -->
+<a id="wa-float" href="https://wa.me/917008749781?text=Hi%21%20I%27d%20like%20to%20place%20an%20order%20from%20Utkal%20Spoon%20Cloud%20Kitchen." target="_blank" rel="noopener noreferrer" aria-label="Order on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-label">Order on WhatsApp</span>
+</a>
+
+<script>
+/* ── CONSTANTS ── */
+const WA_NUM = "917008749781";
+const WA_MSG = "Hi! I'd like to place an order from Utkal Spoon Cloud Kitchen.";
+
+/* ── WHATSAPP ── */
+function openWA(){
+  window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(WA_MSG)}`,'_blank','noopener,noreferrer');
+}
+
+/* ── NAVIGATION ── */
+function showPage(p){
+  document.querySelectorAll('.page').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const page = document.getElementById('page-' + p);
+  if(page) page.classList.add('active');
+  const nl = document.getElementById('nl-' + p);
+  if(nl) nl.classList.add('active');
+  window.scrollTo({top:0, behavior:'instant'});
+  return false;
+}
+
+/* Mobile nav helper — also closes menu */
+function mobNav(p){
+  showPage(p);
+  closeMobileMenu();
+  return false;
+}
+
+/* ── HAMBURGER ── */
+function toggleMobileMenu(){
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger');
+  const isOpen = menu.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.setAttribute('aria-expanded', isOpen);
+}
+function closeMobileMenu(){
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger');
+  menu.classList.remove('open');
+  btn.classList.remove('open');
+  btn.setAttribute('aria-expanded','false');
+}
+document.addEventListener('click', function(e){
+  const menu = document.getElementById('mobile-menu');
+  const btn  = document.getElementById('hamburger');
+  if(menu && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)){
+    closeMobileMenu();
+  }
+});
+
+/* ── MODAL ── */
+function openModal(name, price, desc, ing, img){
+  document.getElementById('mi').src  = img;
+  document.getElementById('mi').alt  = name;
+  document.getElementById('mn').textContent  = name;
+  document.getElementById('mp').textContent  = price;
+  document.getElementById('md').textContent  = desc;
+  document.getElementById('mig').textContent = ing;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e){
+  if(e.target === document.getElementById('modal-overlay')) closeModal();
+}
+// Keyboard: Escape closes modal
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeModal();
+});
+
+/* ── 3D CARD FACTORY ── */
+function makeCard(name, price, desc, ing, img){
+  const wrap = document.createElement('div');
+  wrap.className = 'card-3d-wrap';
+  const d = document.createElement('div');
+  d.className = 'card';
+  d.setAttribute('role','button');
+  d.setAttribute('tabindex','0');
+  d.setAttribute('aria-label', `View details for ${name} - ${price}`);
+  d.onclick  = () => openModal(name, price, desc, ing, img);
+  d.onkeydown = (e) => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openModal(name,price,desc,ing,img); } };
+
+  // 3D tilt — only on pointer devices
+  if(window.matchMedia('(hover:hover)').matches){
+    d.onmousemove = (e) => {
+      const r = d.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width  / 2;
+      const y = e.clientY - r.top  - r.height / 2;
+      const rX = (-y / r.height) * 14;
+      const rY = ( x / r.width)  * 14;
+      d.style.transform = `rotateX(${rX.toFixed(1)}deg) rotateY(${rY.toFixed(1)}deg) translateZ(18px) scale(1.03)`;
+    };
+    d.onmouseleave = () => { d.style.transform = ''; };
+  }
+
+  d.innerHTML = `
+    <div style="position:relative;height:170px;overflow:hidden">
+      <img src="${img}" alt="${name}" style="width:100%;height:100%;object-fit:cover" loading="lazy">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,hsla(20,10%,8%,.8),transparent 55%)"></div>
+      <span class="price-badge">${price}</span>
+    </div>
+    <div class="card-content">
+      <h4 style="font-weight:700;font-size:.88rem;margin-bottom:.3rem;line-height:1.35">${name}</h4>
+      <p style="font-size:.76rem;color:hsl(40,8%,68%);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4">${desc}</p>
+    </div>`;
+  wrap.appendChild(d);
+  return wrap;
+}
+
+/* ── SHOW FLOATING DECORATIONS ON LARGE SCREENS ── */
+function showDecorations(){
+  if(window.innerWidth >= 900){
+    ['deco1','deco2','deco3','deco4'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.style.display = 'block';
+    });
+  }
+}
+showDecorations();
+window.addEventListener('resize', showDecorations);
+
+/* ── VEG ITEMS ── */
+const vegItems = [
+  {name:"Alu Paratha [2 Pc]",price:"₹100",desc:"Authentic tawa parathas stuffed with spiced potato filling.",ing:"Wheat Flour, Potatoes, Onion, Green Chili, Spices, Butter, Ghee",img:"/assets/breakfast/alu-paratha.jpg"},
+  {name:"Paneer Paratha [1 Pc]",price:"₹100",desc:"Spiced cottage cheese stuffed flatbread.",ing:"Wheat Flour, Paneer, Onion, Green Chili, Spices, Butter",img:"/assets/breakfast/paneer-paratha.jpg"},
+  {name:"Puri [5 Pc] & Alu Sabji [1 Plate]",price:"₹129",desc:"Golden puffed puris with hot, spiced potato curry.",ing:"Wheat Flour, Potatoes, Tomatoes, Ginger, Curry Leaves, Spices, Oil",img:"/assets/breakfast/puri-sabji.jpg"},
+  {name:"Puri [5 Pc] & Chhole [1 Plate]",price:"₹159",desc:"Deep-fried puris served with spiced chickpea curry.",ing:"Kabuli Chana, Onions, Tomatoes, Chole Masala, Wheat Flour, Oil",img:"/assets/puri_chhole_1787721850703.jpg"},
+  {name:"Idli [4 Pc], Chutney, Sambar [1 Plate]",price:"₹139",desc:"Soft steamed rice cakes with coconut chutney and sambar.",ing:"Idli Batter, Coconut, Green Chilies, Toor Dal, Vegetables, Spices",img:"/assets/breakfast/idli.jpg"},
+  {name:"Masala Dosa, Chutney [1 Plate]",price:"₹110",desc:"Crispy dosa stuffed with spiced potato filling served with coconut chutney.",ing:"Rice, Urad Dal, Potatoes, Onions, Mustard Seeds, Coconut",img:"/assets/masala_dosa_real.jpg"},
+  {name:"Uppama [1 Plate]",price:"₹109",desc:"Roasted semolina cooked with ghee, mustard seeds, and mixed veggies.",ing:"Semolina, Mustard Seeds, Curry Leaves, Onions, Mixed Vegetables, Ghee",img:"/assets/breakfast/uppama.jpg"},
+  {name:"Vegetable Maggie [1 Plate]",price:"₹100",desc:"Classic Maggi noodles tossed with fresh vegetables and spices.",ing:"Maggi Noodles, Mixed Vegetables, Onions, Tomatoes, Maggi Masala, Oil",img:"/assets/breakfast/veg-maggie.jpg"},
+  {name:"Tea [1 Cup]",price:"₹25",desc:"Freshly brewed Indian masala tea with milk and ginger.",ing:"Tea Leaves, Water, Milk, Sugar, Fresh Ginger, Cardamom",img:"/assets/masala_chai_1787721943337.jpg"},
+  {name:"Poha [1 Plate]",price:"₹99",desc:"Flattened rice sautéed with onions, turmeric, peanuts, and curry leaves.",ing:"Flattened Rice, Onions, Peanuts, Green Chilies, Turmeric, Curry Leaves",img:"/assets/poha_plate_1787722857312.jpg"},
+  {name:"Paneer Masala [1 Plate]",price:"₹239",desc:"Rich cottage cheese cubes in a spiced tomato-onion gravy.",ing:"Paneer, Onions, Tomatoes, Ginger-Garlic Paste, Garam Masala, Cream, Butter",img:"/assets/menu/paneer-masala.jpg"},
+  {name:"Chili Paneer [1 Plate]",price:"₹239",desc:"Crispy paneer tossed in spicy Indo-Chinese sauce with peppers.",ing:"Paneer, Capsicum, Onions, Soy Sauce, Green Chilies, Garlic, Cornflour",img:"/assets/chili_paneer_plate_1787722878931.jpg"},
+  {name:"Paneer Bhurji [1 Plate]",price:"₹149",desc:"Scrambled cottage cheese with onions, tomatoes, and spices.",ing:"Paneer, Onions, Tomatoes, Capsicum, Green Chilies, Turmeric, Coriander",img:"/assets/paneer_bhurji_plate_1787722901917.jpg"},
+  {name:"Pulao [1 Plate]",price:"₹189",desc:"Fragrant basmati rice cooked with mixed vegetables and ghee.",ing:"Basmati Rice, Mixed Vegetables, Whole Spices, Ghee, Cashews",img:"/assets/menu/pulao.jpg"},
+  {name:"Roti [4 Pc] & Seasonal Veg Sabji [1 Plate]",price:"₹139",desc:"4 soft rotis served with fresh seasonal vegetable curry.",ing:"Wheat Flour, Mixed Vegetables, Onion-Tomato Masala, Spices",img:"/assets/menu/regular-thali.jpg"},
+  {name:"Dal Fry [1 Bowl]",price:"₹119",desc:"Tempered yellow lentils cooked with cumin, garlic, and ghee.",ing:"Toor Dal, Onions, Tomatoes, Garlic, Cumin Seeds, Ghee, Red Chili",img:"/assets/dal_fry_bowl_real.jpg"},
+  {name:"Chaval [1 Bowl]",price:"₹99",desc:"Steamed fluffy premium basmati rice.",ing:"Premium Basmati Rice, Water, Salt",img:"https://images.unsplash.com/photo-1516684732162-798a0062be99?w=600&auto=format&fit=crop"},
+  {name:"Chhole [1 Bowl]",price:"₹119",desc:"Spiced chickpea curry in a rich onion-tomato gravy.",ing:"Kabuli Chana, Onions, Tomatoes, Ginger-Garlic, Chole Masala, Ghee",img:"/assets/chhole_bowl_real.jpg"},
+  {name:"Rajma Chaval [1 Plate]",price:"₹179",desc:"Kidney bean curry served with steamed basmati rice.",ing:"Kidney Beans, Onions, Tomatoes, Ginger-Garlic, Rajma Masala, Basmati Rice, Ghee",img:"/assets/menu/rajma-chawal.jpg"},
+  {name:"Roti [1 Pc]",price:"₹15",desc:"Single hot and soft whole wheat roti.",ing:"Whole Wheat Flour, Water, Ghee (optional)",img:"/assets/single_roti_1787721905664.jpg"},
+  {name:"Vegetable Sabji [1 Plate]",price:"₹99",desc:"Stir-fried seasonal mixed vegetables.",ing:"Mixed Vegetables, Mustard Seeds, Onions, Green Chilies, Turmeric, Spices",img:"/assets/veg_sabji_mix.jpg"},
+  {name:"Dahi Bengan [1 Bowl]",price:"₹99",desc:"Fried eggplants cooked in a rich, spiced yogurt gravy.",ing:"Eggplants, Yogurt, Mustard Seeds, Panch Phoron Spices, Curry Leaves",img:"/assets/dahi_baingan_1787721833214.jpg"},
+  {name:"Dahi Bhendi [1 Bowl]",price:"₹100",desc:"Sautéed ladyfingers cooked in yogurt gravy.",ing:"Okra, Yogurt, Onions, Ginger-Garlic, Spices, Oil",img:"/assets/dahi_bhendi_1787721869512.jpg"},
+  {name:"Sev Tomator [1 Plate]",price:"₹99",desc:"Tangy tomato gravy topped with crispy sev.",ing:"Tomatoes, Crispy Sev, Ginger-Garlic Paste, Chili Powder, Garam Masala",img:"/assets/sev_tamatar_1787721922487.jpg"},
+  {name:"Dal & Chaval [1 Plate]",price:"₹179",desc:"Classic homestyle dal fry combined with steamed rice.",ing:"Yellow Lentils, Basmati Rice, Onions, Tomatoes, Garlic, Ghee",img:"/assets/dal_chaval_plate_1787722922978.jpg"},
+];
+
+/* ── NON-VEG ITEMS ── */
+const nonVegItems = [
+  {name:"Chicken Curry (5 Pc) Gravy [1 Bowl]",price:"₹201",desc:"Tender chicken pieces simmered in a rich, aromatic curry gravy.",ing:"Chicken, Onions, Tomatoes, Ginger-Garlic Paste, Spices, Coriander",img:"https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop"},
+  {name:"Chicken Kasa (5 Pc) [1 Plate]",price:"₹220",desc:"Slow-cooked dry chicken with thick, masala-coated pieces.",ing:"Chicken, Onions, Tomatoes, Ginger-Garlic, Dry Spices, Mustard Oil",img:"/assets/chicken_kasa_1787721886258.jpg"},
+  {name:"Fish Curry Ruhu (2 Pc) Gravy [1 Bowl]",price:"₹179",desc:"Authentic Rohu fish cooked in spicy mustard or tomato gravy.",ing:"Rohu Fish, Mustard Oil, Ginger-Garlic Paste, Onions, Spices, Coriander",img:"/assets/rohu_fish_curry_1787722943816.jpg"},
+  {name:"Chicken Pakoda (8 Pc) [1 Plate]",price:"₹330",desc:"Crispy golden-fried chicken fritters seasoned with spices.",ing:"Chicken, Besan, Ginger-Garlic Paste, Chili Powder, Cumin, Coriander, Oil",img:"https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop"},
+  {name:"Egg Curry (2 Eggs) Gravy [1 Bowl]",price:"₹126",desc:"Hard-boiled eggs simmered in a rich onion-tomato gravy.",ing:"Eggs, Onions, Tomatoes, Ginger-Garlic, Spices, Coriander",img:"/assets/egg_curry_bowl_1787722967802.jpg"},
+  {name:"Egg Bhurji (2 Eggs) [1 Plate]",price:"₹90",desc:"Indian-style scrambled eggs with onions, chilies, and spices.",ing:"Eggs, Onions, Tomatoes, Green Chilies, Butter/Oil, Spices",img:"/assets/egg_bhurji_real.jpg"},
+  {name:"Egg Omelette (2 Eggs) [1 Plate]",price:"₹91",desc:"Fluffy 2-egg omelette with onions, tomatoes, and green chilies.",ing:"Eggs, Onions, Green Chilies, Coriander, Salt, Pepper, Butter",img:"/assets/egg_omelette_real.jpg"},
+  {name:"Boiled Egg (2 Eggs) [1 Plate]",price:"₹50",desc:"Simple hard-boiled eggs with salt and pepper.",ing:"Eggs, Water, Salt, Black Pepper",img:"/assets/boiled_egg_real.jpg"},
+];
+
+/* ── RENDER ── */
+const vg  = document.getElementById('veg-grid');
+const nvg = document.getElementById('nonveg-grid');
+vegItems.forEach(i    => vg.appendChild(makeCard(i.name,i.price,i.desc,i.ing,i.img)));
+nonVegItems.forEach(i => nvg.appendChild(makeCard(i.name,i.price,i.desc,i.ing,i.img)));
+
+/* ── AUTOMATED TESTS (run in console on load) ── */
+(function runTests(){
+  const results = [];
+  function test(name, fn){
+    try { fn() ? results.push({name, pass:true}) : results.push({name, pass:false, msg:'assertion failed'}); }
+    catch(e){ results.push({name, pass:false, msg:e.message}); }
+  }
+
+  // UNIT TESTS
+  test('openWA function exists', () => typeof openWA === 'function');
+  test('showPage function exists', () => typeof showPage === 'function');
+  test('closeModal function exists', () => typeof closeModal === 'function');
+  test('makeCard returns DOM element', () => makeCard('Test','₹10','d','i','/x.jpg').nodeType === 1);
+  test('vegItems array not empty', () => vegItems.length > 0);
+  test('nonVegItems array not empty', () => nonVegItems.length > 0);
+
+  // INTEGRATION TESTS
+  test('showPage renders home page', () => { showPage('home'); return document.getElementById('page-home').classList.contains('active'); });
+  test('showPage renders menu page', () => { showPage('menu'); return document.getElementById('page-menu').classList.contains('active'); });
+  test('showPage renders contact page', () => { showPage('contact'); return document.getElementById('page-contact').classList.contains('active'); });
+  test('showPage updates nav-link active', () => { showPage('home'); return document.getElementById('nl-home').classList.contains('active'); });
+  test('Modal opens', () => { openModal('T','₹10','d','i','/x.jpg'); return document.getElementById('modal-overlay').classList.contains('open'); });
+  test('Modal closes', () => { closeModal(); return !document.getElementById('modal-overlay').classList.contains('open'); });
+  test('body overflow hidden when modal open', () => { openModal('T','₹10','d','i','/x.jpg'); const r = document.body.style.overflow === 'hidden'; closeModal(); return r; });
+  test('body overflow restored after modal close', () => document.body.style.overflow === '');
+
+  // SYSTEM TESTS
+  test('Veg grid has items', () => document.getElementById('veg-grid').children.length === vegItems.length);
+  test('NonVeg grid has items', () => document.getElementById('nonveg-grid').children.length === nonVegItems.length);
+  test('Each card has role=button', () => [...document.querySelectorAll('.card')].every(c => c.getAttribute('role')==='button'));
+  test('Each card has tabindex=0', () => [...document.querySelectorAll('.card')].every(c => c.getAttribute('tabindex')==='0'));
+  test('Each card has aria-label', () => [...document.querySelectorAll('.card')].every(c => c.getAttribute('aria-label') !== null));
+  test('Floating WA button exists', () => !!document.getElementById('wa-float'));
+  test('Modal overlay exists', () => !!document.getElementById('modal-overlay'));
+  test('Hamburger button exists', () => !!document.getElementById('hamburger'));
+  test('Mobile menu exists', () => !!document.getElementById('mobile-menu'));
+  test('Navbar has correct z-index (fixed top)', () => document.querySelector('nav').style.zIndex !== '-1');
+
+  // ACCESSIBILITY TESTS
+  test('Page lang attribute set', () => document.documentElement.lang === 'en');
+  test('Meta description present', () => !!document.querySelector('meta[name=description]'));
+  test('WA float has aria-label', () => !!document.getElementById('wa-float').getAttribute('aria-label'));
+  test('Modal has role=dialog', () => document.getElementById('modal-overlay').getAttribute('role') === 'dialog');
+  test('Modal has aria-modal', () => document.getElementById('modal-overlay').getAttribute('aria-modal') === 'true');
+
+  // PRINT REPORT
+  const pass = results.filter(r => r.pass).length;
+  const fail = results.filter(r => !r.pass);
+  console.groupCollapsed(`%c✅ TEST REPORT: ${pass}/${results.length} passed${fail.length ? ' — ' + fail.length + ' FAILED' : ''}`, pass===results.length?'color:#25D366;font-weight:bold':'color:#E23744;font-weight:bold');
+  results.forEach(r => console.log(r.pass ? `  ✅ ${r.name}` : `  ❌ ${r.name}${r.msg?' — '+r.msg:''}`));
+  console.groupEnd();
+
+  // Restore home page after tests
+  showPage('home');
+})();
+</script>
+</body>
+</html>
