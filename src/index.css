@@ -100,6 +100,14 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans;
+    background-attachment: scroll;
+  }
+
+  /* iOS parallax workaround */
+  @supports (-webkit-touch-callout: none) {
+    body {
+      background-attachment: scroll;
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {

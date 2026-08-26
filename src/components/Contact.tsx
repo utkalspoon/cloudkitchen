@@ -25,7 +25,7 @@ const Contact = () => {
                 <h3 className="font-semibold text-foreground mb-2">Call Us</h3>
                 <p className="text-muted-foreground mb-4">Order by phone</p>
                 <Button 
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
                   onClick={() => window.location.href = 'tel:7008749781'}
                 >
                   7008749781
@@ -60,17 +60,17 @@ const Contact = () => {
               <div>
                 <h3 className="font-semibold text-foreground mb-2">Service</h3>
                 <p className="text-muted-foreground mb-4">
-                  Take Away Available
+                  Take Away & Delivery Available
                 </p>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p className="flex items-center justify-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-secondary" />
-                    Coming Soon on Zomato
-                  </p>
-                  <p className="flex items-center justify-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-secondary" />
-                    Coming Soon on Swiggy
-                  </p>
+                <div className="space-y-3 pt-2 flex flex-col items-center px-4">
+                  <a href="https://www.swiggy.com/city/ahmedabad/utaklcloud-kitchen-prahlad-nagar-rest1422492" target="_blank" rel="noopener noreferrer"
+                     className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#FC8019] text-white font-bold hover:-translate-y-1 hover:shadow-[0_4px_12px_rgba(252,128,25,0.4)] transition-all w-full text-sm">
+                    Swiggy
+                  </a>
+                  <a href="http://zoma.to/r/22376644" target="_blank" rel="noopener noreferrer"
+                     className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#E23744] text-white font-bold hover:-translate-y-1 hover:shadow-[0_4px_12px_rgba(226,55,68,0.4)] transition-all w-full text-sm">
+                    Zomato
+                  </a>
                 </div>
               </div>
             </CardContent>
