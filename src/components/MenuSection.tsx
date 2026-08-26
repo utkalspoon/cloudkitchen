@@ -3,25 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import RecipeModal from "@/components/RecipeModal";
 
-// Breakfast images
-import aluParatha from "@/assets/breakfast/alu-paratha.jpg";
-import paneerParatha from "@/assets/breakfast/paneer-paratha.jpg";
-import puriSabji from "@/assets/breakfast/puri-sabji.jpg";
-import idli from "@/assets/breakfast/idli.jpg";
-import masalaDosa from "@/assets/breakfast/masala-dosa.jpg";
-import uppama from "@/assets/breakfast/uppama.jpg";
-import vegMaggie from "@/assets/breakfast/veg-maggie.jpg";
-import tea from "@/assets/breakfast/tea.jpg";
-
-// Menu images
-import regularThali from "@/assets/menu/regular-thali.jpg";
-import paneerMasala from "@/assets/menu/paneer-masala.jpg";
-import pulao from "@/assets/menu/pulao.jpg";
-import vegBiryani from "@/assets/menu/veg-biryani.jpg";
-import mushroomMasala from "@/assets/menu/mushroom-masala.jpg";
-import kadiChaval from "@/assets/menu/kadi-chaval.jpg";
-import rajmaChawal from "@/assets/menu/rajma-chawal.jpg";
-
 interface MenuItem {
   name: string;
   price: string;
@@ -39,6 +20,45 @@ interface MenuCategory {
   showImages?: boolean;
 }
 
+const vegItems: MenuItem[] = [
+  {name:"Alu Paratha [2 Pc]",price:"₹100",description:"Authentic tawa parathas stuffed with spiced potato filling.",ingredients:["Wheat Flour", "Potatoes", "Onion", "Green Chili", "Spices", "Butter", "Ghee"],image:"/assets/breakfast/alu-paratha.jpg"},
+  {name:"Paneer Paratha [1 Pc]",price:"₹100",description:"Spiced cottage cheese stuffed flatbread.",ingredients:["Wheat Flour", "Paneer", "Onion", "Green Chili", "Spices", "Butter"],image:"/assets/breakfast/paneer-paratha.jpg"},
+  {name:"Puri [5 Pc] & Alu Sabji [1 Plate]",price:"₹129",description:"Golden puffed puris with hot, spiced potato curry.",ingredients:["Wheat Flour", "Potatoes", "Tomatoes", "Ginger", "Curry Leaves", "Spices", "Oil"],image:"/assets/breakfast/puri-sabji.jpg"},
+  {name:"Puri [5 Pc] & Chhole [1 Plate]",price:"₹159",description:"Deep-fried puris served with spiced chickpea curry.",ingredients:["Kabuli Chana", "Onions", "Tomatoes", "Chole Masala", "Wheat Flour", "Oil"],image:"/assets/puri_chhole_1787721850703.jpg"},
+  {name:"Idli [4 Pc], Chutney, Sambar [1 Plate]",price:"₹139",description:"Soft steamed rice cakes with coconut chutney and sambar.",ingredients:["Idli Batter", "Coconut", "Green Chilies", "Toor Dal", "Vegetables", "Spices"],image:"/assets/breakfast/idli.jpg"},
+  {name:"Masala Dosa, Chutney [1 Plate]",price:"₹110",description:"Crispy dosa stuffed with spiced potato filling served with coconut chutney.",ingredients:["Rice", "Urad Dal", "Potatoes", "Onions", "Mustard Seeds", "Coconut"],image:"/assets/masala_dosa_real.jpg"},
+  {name:"Uppama [1 Plate]",price:"₹109",description:"Roasted semolina cooked with ghee, mustard seeds, and mixed veggies.",ingredients:["Semolina", "Mustard Seeds", "Curry Leaves", "Onions", "Mixed Vegetables", "Ghee"],image:"/assets/breakfast/uppama.jpg"},
+  {name:"Vegetable Maggie [1 Plate]",price:"₹100",description:"Classic Maggi noodles tossed with fresh vegetables and spices.",ingredients:["Maggi Noodles", "Mixed Vegetables", "Onions", "Tomatoes", "Maggi Masala", "Oil"],image:"/assets/breakfast/veg-maggie.jpg"},
+  {name:"Tea [1 Cup]",price:"₹25",description:"Freshly brewed Indian masala tea with milk and ginger.",ingredients:["Tea Leaves", "Water", "Milk", "Sugar", "Fresh Ginger", "Cardamom"],image:"/assets/masala_chai_1787721943337.jpg"},
+  {name:"Poha [1 Plate]",price:"₹99",description:"Flattened rice sautéed with onions, turmeric, peanuts, and curry leaves.",ingredients:["Flattened Rice", "Onions", "Peanuts", "Green Chilies", "Turmeric", "Curry Leaves"],image:"/assets/poha_plate_1787722857312.jpg"},
+  {name:"Paneer Masala [1 Plate]",price:"₹239",description:"Rich cottage cheese cubes in a spiced tomato-onion gravy.",ingredients:["Paneer", "Onions", "Tomatoes", "Ginger-Garlic Paste", "Garam Masala", "Cream", "Butter"],image:"/assets/menu/paneer-masala.jpg"},
+  {name:"Chili Paneer [1 Plate]",price:"₹239",description:"Crispy paneer tossed in spicy Indo-Chinese sauce with peppers.",ingredients:["Paneer", "Capsicum", "Onions", "Soy Sauce", "Green Chilies", "Garlic", "Cornflour"],image:"/assets/chili_paneer_plate_1787722878931.jpg"},
+  {name:"Paneer Bhurji [1 Plate]",price:"₹149",description:"Scrambled cottage cheese with onions, tomatoes, and spices.",ingredients:["Paneer", "Onions", "Tomatoes", "Capsicum", "Green Chilies", "Turmeric", "Coriander"],image:"/assets/paneer_bhurji_plate_1787722901917.jpg"},
+  {name:"Pulao [1 Plate]",price:"₹189",description:"Fragrant basmati rice cooked with mixed vegetables and ghee.",ingredients:["Basmati Rice", "Mixed Vegetables", "Whole Spices", "Ghee", "Cashews"],image:"/assets/menu/pulao.jpg"},
+  {name:"Roti [4 Pc] & Seasonal Veg Sabji [1 Plate]",price:"₹139",description:"4 soft rotis served with fresh seasonal vegetable curry.",ingredients:["Wheat Flour", "Mixed Vegetables", "Onion-Tomato Masala", "Spices"],image:"/assets/menu/regular-thali.jpg"},
+  {name:"Dal Fry [1 Bowl]",price:"₹119",description:"Tempered yellow lentils cooked with cumin, garlic, and ghee.",ingredients:["Toor Dal", "Onions", "Tomatoes", "Garlic", "Cumin Seeds", "Ghee", "Red Chili"],image:"/assets/dal_fry_bowl_real.jpg"},
+  {name:"Chaval [1 Bowl]",price:"₹99",description:"Steamed fluffy premium basmati rice.",ingredients:["Premium Basmati Rice", "Water", "Salt"],image:"https://images.unsplash.com/photo-1516684732162-798a0062be99?w=600&auto=format&fit=crop"},
+  {name:"Chhole [1 Bowl]",price:"₹119",description:"Spiced chickpea curry in a rich onion-tomato gravy.",ingredients:["Kabuli Chana", "Onions", "Tomatoes", "Ginger-Garlic", "Chole Masala", "Ghee"],image:"/assets/chhole_bowl_real.jpg"},
+  {name:"Rajma Chaval [1 Plate]",price:"₹179",description:"Kidney bean curry served with steamed basmati rice.",ingredients:["Kidney Beans", "Onions", "Tomatoes", "Ginger-Garlic", "Rajma Masala", "Basmati Rice", "Ghee"],image:"/assets/menu/rajma-chawal.jpg"},
+  {name:"Roti [1 Pc]",price:"₹15",description:"Single hot and soft whole wheat roti.",ingredients:["Whole Wheat Flour", "Water", "Ghee (optional)"],image:"/assets/single_roti_1787721905664.jpg"},
+  {name:"Vegetable Sabji [1 Plate]",price:"₹99",description:"Stir-fried seasonal mixed vegetables.",ingredients:["Mixed Vegetables", "Mustard Seeds", "Onions", "Green Chilies", "Turmeric", "Spices"],image:"/assets/veg_sabji_mix.jpg"},
+  {name:"Dahi Bengan [1 Bowl]",price:"₹99",description:"Fried eggplants cooked in a rich, spiced yogurt gravy.",ingredients:["Eggplants", "Yogurt", "Mustard Seeds", "Panch Phoron Spices", "Curry Leaves"],image:"/assets/dahi_baingan_1787721833214.jpg"},
+  {name:"Dahi Bhendi [1 Bowl]",price:"₹100",description:"Sautéed ladyfingers cooked in yogurt gravy.",ingredients:["Okra", "Yogurt", "Onions", "Ginger-Garlic", "Spices", "Oil"],image:"/assets/dahi_bhendi_1787721869512.jpg"},
+  {name:"Sev Tomator [1 Plate]",price:"₹99",description:"Tangy tomato gravy topped with crispy sev.",ingredients:["Tomatoes", "Crispy Sev", "Ginger-Garlic Paste", "Chili Powder", "Garam Masala"],image:"/assets/sev_tamatar_1787721922487.jpg"},
+  {name:"Dal & Chaval [1 Plate]",price:"₹179",description:"Classic homestyle dal fry combined with steamed rice.",ingredients:["Yellow Lentils", "Basmati Rice", "Onions", "Tomatoes", "Garlic", "Ghee"],image:"/assets/dal_chaval_plate_1787722922978.jpg"},
+];
+
+const nonVegItems: MenuItem[] = [
+  {name:"Chicken Curry (5 Pc) Gravy [1 Bowl]",price:"₹201",description:"Tender chicken pieces simmered in a rich, aromatic curry gravy.",ingredients:["Chicken", "Onions", "Tomatoes", "Ginger-Garlic Paste", "Spices", "Coriander"],image:"https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop"},
+  {name:"Chicken Kasa (5 Pc) [1 Plate]",price:"₹220",description:"Slow-cooked dry chicken with thick, masala-coated pieces.",ingredients:["Chicken", "Onions", "Tomatoes", "Ginger-Garlic", "Dry Spices", "Mustard Oil"],image:"/assets/chicken_kasa_1787721886258.jpg"},
+  {name:"Fish Curry Ruhu (2 Pc) Gravy [1 Bowl]",price:"₹179",description:"Authentic Rohu fish cooked in spicy mustard or tomato gravy.",ingredients:["Rohu Fish", "Mustard Oil", "Ginger-Garlic Paste", "Onions", "Spices", "Coriander"],image:"/assets/rohu_fish_curry_1787722943816.jpg"},
+  {name:"Chicken Pakoda (8 Pc) [1 Plate]",price:"₹330",description:"Crispy golden-fried chicken fritters seasoned with spices.",ingredients:["Chicken", "Besan", "Ginger-Garlic Paste", "Chili Powder", "Cumin", "Coriander", "Oil"],image:"https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop"},
+  {name:"Egg Curry (2 Eggs) Gravy [1 Bowl]",price:"₹126",description:"Hard-boiled eggs simmered in a rich onion-tomato gravy.",ingredients:["Eggs", "Onions", "Tomatoes", "Ginger-Garlic", "Spices", "Coriander"],image:"/assets/egg_curry_bowl_1787722967802.jpg"},
+  {name:"Egg Bhurji (2 Eggs) [1 Plate]",price:"₹90",description:"Indian-style scrambled eggs with onions, chilies, and spices.",ingredients:["Eggs", "Onions", "Tomatoes", "Green Chilies", "Butter/Oil", "Spices"],image:"/assets/egg_bhurji_real.jpg"},
+  {name:"Egg Omelette (2 Eggs) [1 Plate]",price:"₹91",description:"Fluffy 2-egg omelette with onions, tomatoes, and green chilies.",ingredients:["Eggs", "Onions", "Green Chilies", "Coriander", "Salt", "Pepper", "Butter"],image:"/assets/egg_omelette_real.jpg"},
+  {name:"Boiled Egg (2 Eggs) [1 Plate]",price:"₹50",description:"Simple hard-boiled eggs with salt and pepper.",ingredients:["Eggs", "Water", "Salt", "Black Pepper"],image:"/assets/boiled_egg_real.jpg"},
+];
+
 const MenuSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
@@ -55,222 +75,18 @@ const MenuSection = () => {
 
   const menuCategories: MenuCategory[] = [
     {
-      title: "Breakfast Menu",
-      description: "Start your day delicious",
-      showImages: true,
-      items: [
-        {
-          name: "Alu Paratha",
-          price: "₹50",
-          description: "2 Pieces with curd and pickle",
-          image: aluParatha,
-          ingredients: ["Wheat Flour", "Potatoes", "Onion", "Green Chili", "Spices"],
-          preparation: [
-            "Boil and mash the potatoes.",
-            "Sauté onions, green chilies, and spices.",
-            "Mix the sautéed ingredients with mashed potatoes to make the filling.",
-            "Roll out the dough, add the filling, and seal it.",
-            "Cook on a tawa with ghee until golden brown.",
-          ],
-        },
-        {
-          name: "Paneer Paratha",
-          price: "₹60",
-          description: "1 Piece",
-          image: paneerParatha,
-          ingredients: ["Wheat Flour", "Paneer", "Onion", "Green Chili", "Spices"],
-          preparation: [
-            "Crumble the paneer.",
-            "Mix paneer with finely chopped onions, green chilies, and spices.",
-            "Roll out the dough, add the paneer filling, and seal it.",
-            "Cook on a tawa with ghee until golden brown on both sides.",
-          ],
-        },
-        {
-          name: "Puri with Sabji",
-          price: "₹60",
-          description: "5 Pieces",
-          image: puriSabji,
-          ingredients: ["Wheat Flour", "Potatoes", "Tomatoes", "Ginger", "Spices"],
-          preparation: [
-            "Knead the dough for puris and let it rest.",
-            "Prepare the sabji by cooking potatoes and tomatoes with spices.",
-            "Roll out small circles from the dough.",
-            "Deep fry the puris until they puff up and turn golden brown.",
-            "Serve hot with sabji.",
-          ],
-        },
-        {
-          name: "Idli with Chutney & Sambar",
-          price: "₹50",
-          description: "5 Pieces",
-          image: idli,
-          ingredients: ["Rice", "Urad Dal", "Fenugreek Seeds", "Toor Dal", "Vegetables", "Spices"],
-          preparation: [
-            "Soak rice and urad dal, then grind to a smooth batter.",
-            "Ferment the batter overnight.",
-            "Steam the idlis in an idli maker.",
-            "Prepare sambar with toor dal and vegetables.",
-            "Prepare chutney with coconut and spices.",
-            "Serve hot.",
-          ],
-        },
-        {
-          name: "Masala Dosa with Chutney",
-          price: "₹60",
-          image: masalaDosa,
-          ingredients: ["Rice", "Urad Dal", "Potatoes", "Onion", "Spices"],
-          preparation: [
-            "Prepare dosa batter and ferment it.",
-            "Prepare the potato masala filling.",
-            "Spread the batter on a hot tawa to make a thin dosa.",
-            "Add the filling and fold the dosa.",
-            "Serve hot with chutney and sambar.",
-          ],
-        },
-        {
-          name: "Uppama",
-          price: "₹40",
-          image: uppama,
-          ingredients: ["Semolina (Rava)", "Onion", "Green Chili", "Mustard Seeds", "Vegetables"],
-          preparation: [
-            "Roast the semolina until lightly golden.",
-            "Sauté mustard seeds, onions, green chilies, and vegetables.",
-            "Add water and bring to a boil.",
-            "Slowly add the roasted semolina while stirring continuously.",
-            "Cook until the upma is thick and cooked through.",
-          ],
-        },
-        {
-          name: "Vegetable Maggie",
-          price: "₹40",
-          image: vegMaggie,
-          ingredients: ["Maggie Noodles", "Mixed Vegetables", "Maggie Masala"],
-          preparation: [
-            "Boil water and add the Maggie noodles and masala.",
-            "Add chopped mixed vegetables.",
-            "Cook for 2-3 minutes until the noodles are cooked.",
-            "Serve hot.",
-          ],
-        },
-        {
-          name: "Tea",
-          price: "₹10",
-          image: tea,
-          ingredients: ["Tea Leaves", "Water", "Milk", "Sugar", "Ginger/Cardamom (optional)"],
-          preparation: [
-            "Boil water with tea leaves and ginger/cardamom.",
-            "Add milk and sugar.",
-            "Bring to a boil again.",
-            "Strain and serve hot.",
-          ],
-        },
-      ],
-    },
-    {
-      title: "Regular Thali",
-      description: "Complete homestyle meal",
+      title: "Veg Items",
+      description: "Authentic & Homestyle Pure Veg",
       badge: "Most Popular",
       showImages: true,
-      items: [
-        {
-          name: "Regular Thali",
-          price: "₹80",
-          description: "4 Roti, Sabji, Dal, Rice, Salad",
-          image: regularThali,
-          ingredients: ["Wheat Flour", "Seasonal Vegetables", "Lentils", "Rice", "Salad ingredients"],
-          preparation: [
-            "Prepare soft rotis from wheat flour.",
-            "Cook a seasonal vegetable sabji with spices.",
-            "Cook dal with tempering.",
-            "Steam fluffy rice.",
-            "Prepare a fresh salad.",
-            "Assemble the thali and serve.",
-          ],
-        },
-      ],
+      items: vegItems,
     },
     {
-      title: "Optional Menu",
-      description: "Prior intimation preferable",
+      title: "Non-Veg Items",
+      description: "Rich & Flavorful",
       showImages: true,
-      items: [
-        {
-          name: "Paneer Masala / Chili Paneer",
-          price: "₹130",
-          image: paneerMasala,
-          ingredients: ["Paneer", "Onion", "Tomatoes", "Capsicum", "Spices", "Sauces"],
-          preparation: [
-            "Cut paneer into cubes.",
-            "For Paneer Masala: Make a gravy with onions, tomatoes, and spices, then add paneer.",
-            "For Chili Paneer: Sauté paneer with capsicum, onions, and sauces.",
-            "Garnish with fresh coriander and serve hot.",
-          ],
-        },
-        {
-          name: "Pulao",
-          price: "₹80",
-          image: pulao,
-          ingredients: ["Basmati Rice", "Mixed Vegetables", "Whole Spices", "Ghee"],
-          preparation: [
-            "Wash and soak the rice.",
-            "Sauté whole spices in ghee.",
-            "Add mixed vegetables and sauté.",
-            "Add rice, water, and salt.",
-            "Cook until the rice is fluffy and aromatic.",
-          ],
-        },
-        {
-          name: "Veg Biryani",
-          price: "₹120",
-          image: vegBiryani,
-          ingredients: ["Basmati Rice", "Mixed Vegetables", "Yogurt", "Biryani Masala", "Mint Leaves"],
-          preparation: [
-            "Parboil the rice.",
-            "Marinate vegetables in yogurt and biryani masala.",
-            "Layer the rice and marinated vegetables in a pot.",
-            "Cook on low heat (dum) until done.",
-            "Garnish with fried onions and mint leaves.",
-          ],
-        },
-        {
-          name: "Mushroom Masala",
-          price: "₹120",
-          image: mushroomMasala,
-          ingredients: ["Mushrooms", "Onion", "Tomatoes", "Ginger-Garlic Paste", "Spices"],
-          preparation: [
-            "Clean and slice the mushrooms.",
-            "Make a gravy with onions, tomatoes, and spices.",
-            "Add the mushrooms and cook until tender.",
-            "Garnish with coriander and serve hot.",
-          ],
-        },
-        {
-          name: "Kadi Chaval",
-          price: "₹80",
-          image: kadiChaval,
-          ingredients: ["Yogurt", "Besan (Gram Flour)", "Spices", "Rice"],
-          preparation: [
-            "Prepare a mixture of yogurt and besan.",
-            "Cook the mixture with spices until it thickens to form kadi.",
-            "Prepare steamed rice.",
-            "Serve the kadi over the rice.",
-          ],
-        },
-        {
-          name: "Rajma Chaval",
-          price: "₹80",
-          image: rajmaChawal,
-          ingredients: ["Rajma (Kidney Beans)", "Onion", "Tomatoes", "Spices", "Rice"],
-          preparation: [
-            "Soak and boil the rajma until soft.",
-            "Prepare a masala with onions, tomatoes, and spices.",
-            "Add the boiled rajma to the masala and simmer.",
-            "Serve hot with steamed rice.",
-          ],
-        },
-      ],
-    },
+      items: nonVegItems,
+    }
   ];
 
   return (
@@ -344,7 +160,7 @@ const MenuSection = () => {
                         <CardContent className="pt-4 pb-4">
                           <h4 className="font-semibold text-foreground text-lg mb-1">{item.name}</h4>
                           {item.description && (
-                            <p className="text-sm text-muted-foreground">{item.description}</p>
+                            <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                           )}
                         </CardContent>
                       </Card>
